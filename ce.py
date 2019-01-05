@@ -5,12 +5,13 @@
 #
 #Author: Xuran Wang   Yuanzhe Liu
 #
-#2019/01/03
-import chessmaster.chess
+#2019/01/4
+
+import cm.chess
 
 def main():
     print("Hello World!!")
-    board = chessmaster.chess.Board()
+    board = cm.chess.Board()
     print(board)
 
 main()
