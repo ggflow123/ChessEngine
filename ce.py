@@ -6,8 +6,11 @@
 #Author: Xuran Wang   Yuanzhe Liu
 #
 #2019/01/03
+import chessmaster.chess
 
 def main():
-	print("Hello World!!")
+    print("Hello World!!")
+    board = chessmaster.chess.Board()
+    print(board)
 
 main()
