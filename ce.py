@@ -7,11 +7,14 @@
 #
 #2019/01/4
 
-import cm.chess
+import chess
 
 def main():
     print("Hello World!!")
-    board = cm.chess.Board()
+    board = chess.Board()
+    print(board)
+    mv = chess.Move(8,16)
+    board.push(mv)
     print(board)
 
 main()
