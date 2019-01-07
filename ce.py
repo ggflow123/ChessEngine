@@ -12,6 +12,15 @@ import chess
 def main():
     print("Hello World!!")
     board = chess.Board()
+    while not board.is_game_over:
+        print(board)
+        if(board.turn):
+            # if it is white(lower)'s turn
+        else:
+            # if it is black(upper)'s turn
+    print(result)
+
+
     print(board)
     mv = chess.Move(8,16)
     board.push(mv)
