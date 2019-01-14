@@ -12,7 +12,39 @@ import random
 
 # the evaluation function
 def eval_func(board):
-    return
+    totalEval = 0
+    for i in range(0, 63):
+        totalEval = totalEval + getPieceValue(i, board)
+    return totalEval
+
+#def PawnWhiteValue():
+   # PawnWhite = [ [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0], [1.0, 1.0, 2.0, 3.0, 3.0, 2.0, 1.0, 1.0], [0.5, 0.5, 1.0, 2.5, 2.5, 1.0, 0.5, 0.5], [0.0, 0.0, 0.0, 2.0, 2.0, 0.0, 0.0, 0.0], [0.5, -0.5, -1.0, 0.0, 0.0, -1.0, -0.5, 0.5], 0.5, 1.0, 1.0, -2.0, -2.0, 1.0, 1.0, 0.5], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0] ]
+   # return PawnWhite
+
+
+def getAbsolutePieceValue(i, board):
+    if board.piece_type_at(i) == 1:#if the piece is Pawn
+        return 10
+    elif board.piece_type_at(i) == 2:#if the piece is Knight
+        return 30
+    elif board.piece_type_at(i) == 3:#if the piece is Bishop
+        return 30
+    elif board.piece_type_at(i) == 4:#if the piece is Rook
+        return 50
+    elif board.piece_type_at(i) == 5:#if the piece is Queen
+        return 90
+    elif board.piece_type_at(i) == 6:#if the piece is King
+        return 900
+
+def getPieceValue(i, board):
+    piece = board.piece_at(i)
+    value = getAbsolutePieceValue(i, board)
+    if piece.color:
+        return value
+    else:
+        value = -value
+        return value
+
 
 # the value of search value
 def ab_search(board,a,b,depth):
@@ -50,6 +82,10 @@ def main():
     while True:
         print(board)
         print(board.fullmove_number)
+       # piece = board.piece_at(0)
+       # print(piece.color)
+       # T = [[0, 1, 2], [1, 2, 3]]
+       # print(T[0][2])
         if board.is_game_over():
             break
         elif(board.turn):
