@@ -14,12 +14,15 @@ import random
 def eval_func(board):
     totalEval = 0
     for i in range(0, 63):
+       # piece = board.piece_at(i)
+       # print(i)
+       # print(piece.color)
         totalEval = totalEval + getPieceValue(i, board)
     return totalEval
 
-#def PawnWhiteValue():
-   # PawnWhite = [ [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0], [1.0, 1.0, 2.0, 3.0, 3.0, 2.0, 1.0, 1.0], [0.5, 0.5, 1.0, 2.5, 2.5, 1.0, 0.5, 0.5], [0.0, 0.0, 0.0, 2.0, 2.0, 0.0, 0.0, 0.0], [0.5, -0.5, -1.0, 0.0, 0.0, -1.0, -0.5, 0.5], 0.5, 1.0, 1.0, -2.0, -2.0, 1.0, 1.0, 0.5], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0] ]
-   # return PawnWhite
+def PawnWhiteValue():
+    PawnWhite = [ [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0], [1.0, 1.0, 2.0, 3.0, 3.0, 2.0, 1.0, 1.0], [0.5, 0.5, 1.0, 2.5, 2.5, 1.0, 0.5, 0.5], [0.0, 0.0, 0.0, 2.0, 2.0, 0.0, 0.0, 0.0], [0.5, -0.5, -1.0, 0.0, 0.0, -1.0, -0.5, 0.5], [0.5, 1.0, 1.0, -2.0, -2.0, 1.0, 1.0, 0.5], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0] ]
+    return PawnWhite
 
 
 def getAbsolutePieceValue(i, board):
@@ -38,12 +41,17 @@ def getAbsolutePieceValue(i, board):
 
 def getPieceValue(i, board):
     piece = board.piece_at(i)
-    value = getAbsolutePieceValue(i, board)
-    if piece.color:
-        return value
+    #print("Get Piece value", i)
+    #print(piece.color)
+    if piece == None:
+        return 0
     else:
-        value = -value
-        return value
+        value = getAbsolutePieceValue(i, board)
+        if board.piece_at(i).color:
+            return value
+        else:
+            value = -value
+            return value
 
 
 # the value of search value
@@ -82,13 +90,17 @@ def main():
     while True:
         print(board)
         print(board.fullmove_number)
+        boolean = board.turn #whether it is the white turn of black turn
+       # print(b)
        # piece = board.piece_at(0)
        # print(piece.color)
        # T = [[0, 1, 2], [1, 2, 3]]
        # print(T[0][2])
+#        PawnWhite = [ [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0], [1.0, 1.0, 2.0, 3.0, 3.0, 2.0, 1.0, 1.0], [0.5, 0.5, 1.0, 2.5, 2.5, 1.0, 0.5, 0.5], [0.0, 0.0, 0.0, 2.0, 2.0, 0.0, 0.0, 0.0], [0.5, -0.5, -1.0, 0.0, 0.0, -1.0, -0.5, 0.5], [0.5, 1.0, 1.0, -2.0, -2.0, 1.0, 1.0, 0.5], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0] ]
+#        print(PawnWhite[1][0])
         if board.is_game_over():
             break
-        elif(board.turn):
+        elif boolean:
             # if white(lower)'s turn
             print("Please enter the move\n")
             fromm = eval(input("from\n"))
@@ -115,7 +127,13 @@ def main():
             
             for move in board.legal_moves:
                 board.push(move)
-                value=ab_search(-10000,10000,board,depth)
+                piece = board.piece_at(6)
+                #print(6, piece.color)
+                #piece2 = board.piece_at(34)
+                #if piece2 == None:
+                 #   print(34, "None!")
+                depth = 2
+                value=ab_search(board,-10000,10000,depth)
                 if value<=minvalue:
                     bestmove=move
                     minvalue=value
