@@ -10,6 +10,11 @@
 import chess
 import random
 
+def int_to_cor(i):
+    x = i // 8
+    y = i - x*8
+    return x, y
+
 # the evaluation function
 def eval_func(board):
     totalEval = 0
@@ -24,20 +29,82 @@ def PawnWhiteValue():
     PawnWhite = [ [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0], [1.0, 1.0, 2.0, 3.0, 3.0, 2.0, 1.0, 1.0], [0.5, 0.5, 1.0, 2.5, 2.5, 1.0, 0.5, 0.5], [0.0, 0.0, 0.0, 2.0, 2.0, 0.0, 0.0, 0.0], [0.5, -0.5, -1.0, 0.0, 0.0, -1.0, -0.5, 0.5], [0.5, 1.0, 1.0, -2.0, -2.0, 1.0, 1.0, 0.5], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0] ]
     return PawnWhite
 
+def PawnBlackValue():
+    PawnW = PawnWhiteValue()
+    PawnBlack = list(reversed(PawnW))
+    return PawnBlack
 
-def getAbsolutePieceValue(i, board):
+def KnightValue():
+    Knight = [ [-5.0, -4.0, -3.0, -3.0, -3.0, -3.0, -4.0, -5.0], [-4.0, -2.0, 0.0, 0.0, 0.0, 0.0, -2.0, -4.0], [-3.0, 0.0, 1.0, 1.5, 1.5, 1.0, 0.0, -3.0], [-3.0, 0.5, 1.5, 2.0, 2.0, 1.5, 0.5, -3.0], [-3.0, 0.0, 1.5, 2.0, 2.0, 1.5, 0.0, -3.0], [-3.0, 0.5, 1.0, 1.5, 1.5, 1.0, 0.5, -3.0], [-4.0, -2.0, 0.0, 0.5, 0.5, 0.0, -2.0, -4.0], [-5.0, -4.0, -3.0, -3.0, -3.0, -3.0, -4.0, -5.0] ]
+    return Knight
+
+def BishopWhiteValue():
+    BishopWhite = [ [-2.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 2.0], [-1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0], [-1.0, 0.0, 0.5, 1.0, 1.0, 0.5, 0.0, -1.0], [-1.0, 0.5, 0.5, 1.0, 1.0, 0.5, 0.5, -1.0], [-1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, -1.0], [-1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, -1.0], [-1.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, -1.0], [-2.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -2.0] ]
+    return BishopWhite
+
+def BishopBlackValue():
+    BishopW = BishopWhiteValue()
+    BishopBlack = list(reversed(BishopW))
+    return BishopBlack
+
+def RookWhiteValue():
+    RookWhite = [ [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.5], [-0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -0.5], [-0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -0.5], [-0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -0.5], [-0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -0.5], [-0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -0.5], [0.0, 0.0, 0.0, 0.5, 0.5, 0.0, 0.0, 0.0] ]
+    return RookWhite
+
+def RookBlackValue():
+    RookW = RookWhiteValue()
+    RookBlack = list(reversed(RookW))
+    return RookBlack
+
+def QueenValue():
+    Queen = [[-2.0, -1.0, -1.0, -0.5, -0.5, -1.0, -1.0, -2.0], [-1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0], [-1.0, 0.0, 0.5, 0.5, 0.5, 0.5, 0.0, -1.0], [-0.5, 0.0, 0,5, 0.5, 0.5, 0.5, 0.0, -0.5], [0.0, 0.0, 0.5, 0.5, 0.5, 0.5, 0.0, -0.5], [-1.0, 0.5, 0.5, 0.5, 0.5, 0.5, 0.0, -1.0], [-1.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, -1.0], [-2.0, -1.0, -1.0, -0.5, -0.5, -1.0, -1.0, -2.0] ]
+    return Queen
+
+def KingWhiteValue():
+    KingWhite = [ [-3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0], [-3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0], [-3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0], [-3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0], [-2.0, -3.0, -3.0, -4.0, -4.0, -3.0, -3.0, -2.0], [-1.0, -2.0, -2.0, -2.0, -2.0, -2.0, -2.0, -1.0], [2.0, 2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 2.0], [2.0, 3.0, 1.0, 0.0, 0.0, 1.0, 3.0, 2.0] ]
+    return KingWhite
+
+def KingBlackValue():
+    KingW = KingWhiteValue()
+    KingBlack = list(reversed(KingW))
+    return KingBlack
+
+def getAbsolutePieceValue(i, board, color):
+    x, y = int_to_cor(i)
     if board.piece_type_at(i) == 1:#if the piece is Pawn
-        return 10
+        if color:
+            evalue = PawnWhiteValue()
+            return 10 + evalue[x][y]
+        else:
+            evalue = PawnBlackValue()
+            return 10 + evalue[x][y]
     elif board.piece_type_at(i) == 2:#if the piece is Knight
-        return 30
+        evalue = KnightValue()        
+        return 30 + evalue[x][y]
     elif board.piece_type_at(i) == 3:#if the piece is Bishop
-        return 30
+        if color:
+            evalue = BishopWhiteValue()
+            return 30 + evalue[x][y]
+        else:
+            evalue = BishopBlackValue()
+            return 30 + evalue[x][y]
     elif board.piece_type_at(i) == 4:#if the piece is Rook
-        return 50
+        if color:
+            evalue = RookWhiteValue()
+            return 50 + evalue[x][y]
+        else:
+            evalue = RookBlackValue()
+            return 50 + evalue[x][y]
     elif board.piece_type_at(i) == 5:#if the piece is Queen
-        return 90
+        evalue = QueenValue()
+        return 90 + evalue[x][y]
     elif board.piece_type_at(i) == 6:#if the piece is King
-        return 900
+        if color:
+            evalue = KingWhiteValue()
+            return 900 + evalue[x][y]
+        else:
+            evalue = KingBlackValue()
+            return 900 + evalue[x][y]
 
 def getPieceValue(i, board):
     piece = board.piece_at(i)
@@ -46,7 +113,8 @@ def getPieceValue(i, board):
     if piece == None:
         return 0
     else:
-        value = getAbsolutePieceValue(i, board)
+        color = piece.color
+        value = getAbsolutePieceValue(i, board, color)
         if board.piece_at(i).color:
             return value
         else:
@@ -90,12 +158,15 @@ def main():
     while True:
         print(board)
         print(board.fullmove_number)
+       # x, y = int_to_cor(9)
+       # print(x, y)
         boolean = board.turn #whether it is the white turn of black turn
        # print(b)
        # piece = board.piece_at(0)
        # print(piece.color)
        # T = [[0, 1, 2], [1, 2, 3]]
-       # print(T[0][2])
+       # S = list(reversed(T))
+       # print(S[0][0])
 #        PawnWhite = [ [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0], [1.0, 1.0, 2.0, 3.0, 3.0, 2.0, 1.0, 1.0], [0.5, 0.5, 1.0, 2.5, 2.5, 1.0, 0.5, 0.5], [0.0, 0.0, 0.0, 2.0, 2.0, 0.0, 0.0, 0.0], [0.5, -0.5, -1.0, 0.0, 0.0, -1.0, -0.5, 0.5], [0.5, 1.0, 1.0, -2.0, -2.0, 1.0, 1.0, 0.5], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0] ]
 #        print(PawnWhite[1][0])
         if board.is_game_over():
@@ -132,7 +203,7 @@ def main():
                 #piece2 = board.piece_at(34)
                 #if piece2 == None:
                  #   print(34, "None!")
-                depth = 2
+                depth = 6
                 value=ab_search(board,-10000,10000,depth)
                 if value<=minvalue:
                     bestmove=move
