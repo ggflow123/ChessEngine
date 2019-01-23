@@ -215,4 +215,4 @@ def main():
     print(board.result)
     board.clear()
 
-main()
+# main()
