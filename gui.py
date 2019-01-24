@@ -1,3 +1,12 @@
+# gui.py
+#
+# This program let people play chess with AI via GUI
+# wxPython installation needed
+#
+# Author: Xuran Wang & Yuanzhe Liu
+#
+# 2019/01/24
+
 import wx
 import chess
 import ce
@@ -5,18 +14,21 @@ import ce
 class BoardFrame(wx.Frame):
 
     def __init__(self):
-        wx.Frame.__init__(self, None, -1, "Chess AI", size=(450, 450))
+        wx.Frame.__init__(self, None, -1, "Chess AI", size=(470, 470))
         self.board=chess.Board()
         self.point=wx.Point()
         self.panel = wx.Panel(self, size=wx.Size(400, 400))
+        self.statusBar=wx.StatusBar(self,-1)
+        self.SetStatusBar(self.statusBar)
         self.dc=None
         self.start=-1
         self.end=-1
-        self.depth=2
+        self.depth=50
         # state=True: waiting for the first click(i.e. move a piece from board
         # state=False: waiting for the second click(i.e. put the previous piece on the board
         # after state 1, if this move is legal, AI should play a move, else once again. Then reset it to True
         self.state=True
+        self.statusBar.SetStatusText("click the piece you want to move")
         self.panel.Bind(wx.EVT_PAINT, self.draw_board)
         self.panel.Bind(wx.EVT_LEFT_DOWN,  self.onMove)
 
@@ -32,6 +44,7 @@ class BoardFrame(wx.Frame):
         self.point = event.GetPosition()
         if self.state:
             # waiting for the first click(i.e.move a piece from board
+            self.statusBar.SetStatusText("one piece selected - please click one location")
             self.start=self.getLoc()
             self.state=False
         else:
@@ -44,7 +57,6 @@ class BoardFrame(wx.Frame):
                 # push the users' move
                 self.board.push(move)
                 # print the board after user's move
-                print("user moved")
                 self.Refresh(True)
                 self.panel.Bind(wx.EVT_PAINT, self.draw_board)
                 self.test_game_over()
@@ -54,7 +66,6 @@ class BoardFrame(wx.Frame):
                 for move in self.board.legal_moves:
                     self.board.push(move)
                     piece = self.board.piece_at(6)
-                    self.depth = 6
                     value = ce.ab_search(self.board, -10000, 10000, self.depth)
                     if value <= minvalue:
                         bestmove = move
@@ -63,27 +74,40 @@ class BoardFrame(wx.Frame):
                 self.board.push(bestmove)
 
                 # print the board after AI's move
-                print("AI moved")
                 self.Refresh(True)
                 self.panel.Bind(wx.EVT_PAINT, self.draw_board)
                 self.test_game_over()
+                self.statusBar.SetStatusText("click the piece you want to move")
             else:
                 # indicate the move is illegal and start again
-                print("illegal")
+                self.statusBar.SetStatusText("illegal move - please click the piece you want to move")
 
 
     # test the game is over or not, if so, print who is the winner
     def test_game_over(self):
         if self.board.is_game_over():
-            print(self.board.result)
+            res=""
+            if self.board.result() == "1-0":
+                res="YOU WIN"
+            elif self.board.result() == "0-1":
+                res="YOU LOSE"
+            else:
+                res="DRAW"
             self.board.clear()
+            dlg = wx.MessageDialog(None, res, "GAME OVER", wx.OK)
+            dlg.ShowModal()
+            #if dlg.ShowModal() == wx.OK:
+            #    self.Close(True)
+            #dlg.Destroy()
+            self.Close()
+
+
 
 
 
     # draw the whole board according to the Board object
     def draw_board(self,event):
         # draw the grid of chessboard
-        print("Hey")
         self.dc = wx.PaintDC(event.GetEventObject())
         self.dc.Clear()
         self.dc.SetBrush(wx.Brush(wx.Colour(255, 206, 158), style=wx.BRUSHSTYLE_SOLID))
@@ -108,7 +132,6 @@ class BoardFrame(wx.Frame):
             x=0
 
         # draw all Pieces
-        # dc2 = wx.ClientDC(event.GetEventObject())
         pict = wx.Image()
 
         loc=0

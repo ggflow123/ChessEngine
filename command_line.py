@@ -1,3 +1,11 @@
+# command_line.py
+#
+# this program could let people play chess with AI using command_line arguments
+#
+# Author: Xuran Wang & Yuanzhe Liu
+#
+# 2019/01/24
+
 import ce
 from ce import *
 
@@ -61,7 +69,13 @@ def main():
 
             board.push(bestmove)
 
-    print(board.result)
+    # get who is the winner
+    if board.result()=="1-0":
+        print("YOU WIN")
+    elif board.result()=="0-1":
+        print("YOU LOSE")
+    else:
+        print("DRAW")
     board.clear()
 
 main()

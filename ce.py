@@ -1,11 +1,11 @@
-#ce.py
+# ce.py
 #
-#ce --- chess engine: a program that can play the chess
-#   --- only following the basic rules of chess for now
+# ce --- chess engine: a program that can play chess
+#    --- this file includes some functions about chess engine
 #
-#Author: Xuran Wang   Yuanzhe Liu
+# Author: Xuran Wang & Yuanzhe Liu
 #
-#2019/01/4
+# 2019/01/24
 
 import chess
 import random
