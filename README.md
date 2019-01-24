@@ -19,4 +19,5 @@ This game uses [python-chess library by niklasf](https://github.com/niklasf/pyth
 This game uses wxPython to build GUI. **To run this program, Installation of wxPython is needed.**
 
 The images of piece is from [Chess Icons for Android Ice Cream](https://icons8.com/icon/set/chess/android).
+
 Click the piece or tile while needed. If the game is over, the program will be killed.
